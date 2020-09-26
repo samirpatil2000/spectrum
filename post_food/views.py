@@ -77,6 +77,7 @@ def index(request):
     featured=Post.objects.all()[0:3]
     latest=Post.objects.order_by('-date_posted')[0:3]
     cat=Category.objects.all()
+
     context = {
         'object_list': featured,
         'latest': latest,
@@ -121,7 +122,10 @@ def blog(request):
 def post(request ,id):
     category_count = get_category_count()
     post=get_object_or_404(Post,id=id)
+    like_fun=get_object_or_404(Post,id=id)
+    likes=like_fun.number_of_likes()  # function calling from models.py
     latest = Post.objects.order_by('-date_posted')[0:3]
+
 
     if request.user.is_authenticated :
       PostView.objects.get_or_create(user=request.user,post=post)
@@ -139,7 +143,8 @@ def post(request ,id):
     context={
         'latest': latest,
         'post':post,
-        'category_count': category_count
+        'category_count': category_count,
+        'likes':likes ,
     }
 
 

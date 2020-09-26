@@ -59,7 +59,7 @@
                     <form action="{% url 'like_post' post.pk %}" >
                         <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
                             Likes
-                        </button>
+                        </button>  -- {{ likes }}
                     </form>
 
                     <p>

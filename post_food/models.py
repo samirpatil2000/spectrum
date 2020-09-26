@@ -31,10 +31,11 @@ class Post(models.Model):
     likes=models.ManyToManyField(User,related_name='posts_like')
     #featured=models.BooleanField()
 
+
     def __str__(self):
         return self.title
 
-    def number_of_likes(self):
+    def number_of_likes(self): # this is the function that we are gonna call
         return self.likes.count()
 
     def get_absolute_url(self):
