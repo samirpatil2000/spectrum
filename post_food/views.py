@@ -119,16 +119,27 @@ def blog(request):
     }
     return render(request,'post_food/blog.html' , context)
 
+
+# this is post detail view
 def post(request ,id):
     category_count = get_category_count()
     post=get_object_or_404(Post,id=id)
-    like_fun=get_object_or_404(Post,id=id)
-    likes=like_fun.number_of_likes()  # function calling from models.py
+
+    like_fun = get_object_or_404(Post, id=id)
+    likes = like_fun.number_of_likes()     # function calling from models.py
+
+    liked=False
+
+    if like_fun.likes.filter(id=request.user.id).exists():
+        liked=True
     latest = Post.objects.order_by('-date_posted')[0:3]
 
+    if request.user.is_authenticated :  # this is for view
+        # and only authenticated user can view or like the post
+        PostView.objects.get_or_create(user=request.user,post=post)
 
-    if request.user.is_authenticated :
-      PostView.objects.get_or_create(user=request.user,post=post)
+
+
 
 
     # form=CommentForm(request.POST or None)
@@ -145,6 +156,7 @@ def post(request ,id):
         'post':post,
         'category_count': category_count,
         'likes':likes ,
+        'liked':liked,
     }
 
 
@@ -233,7 +245,14 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
             return True
 
 
+@login_required   #if user is authentic then you can like it
 def likepost(request,pk):
     post=get_object_or_404(Post,id=request.GET.get('post_id'))
-    post.likes.add(request.user)
+    liked=False
+    if post.likes.filter(id=request.user.id).exists():   # if user double clicked on the like button then remove it
+        post.likes.remove(request.user)
+        liked=False
+    else:
+        post.likes.add(request.user)
+        liked=True      # this is for showing the user
     return HttpResponseRedirect(reverse('post-details',args=[str(pk)]))

@@ -56,11 +56,23 @@
                   </div>
                 </div>
                 <div class="post-body">
-                    <form action="{% url 'like_post' post.pk %}" >
-                        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
-                            Likes
-                        </button>  -- {{ likes }}
-                    </form>
+                    {% if user.is_authenticated %}
+                            {% if liked %}
+                                <form action="{% url 'like_post' post.pk %}" >
+                                    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
+                                        Unlike
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="{% url 'like_post' post.pk %}" >
+                                    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+                                        Likes
+                                    </button>
+                                </form>
+                            {% endif %}
+                    {% endif %}
+                    <h5> the number of like {{ likes }}</h5>
+
 
                     <p>
                     <h5>{{ post.content|safe}}</h5>
