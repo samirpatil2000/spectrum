@@ -9,7 +9,7 @@ from django.template.loader import get_template
 
 from.models import Post,Category,PostView
 from django.views.generic import ListView , DetailView,CreateView,UpdateView,DeleteView
-from .forms import PostForm,ContactForm
+from .forms import PostForm,ContactForm,CommentForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -138,18 +138,16 @@ def post(request ,id):
         # and only authenticated user can view or like the post
         PostView.objects.get_or_create(user=request.user,post=post)
 
-
-
-
-
-    # form=CommentForm(request.POST or None)
-    # if request.method=="POST":
-    #     if form.is_valid():
-    #         form.instance.user=request.user
-    #         form.instance.post=post
-    #         form.save()
-    #         return redirect(reverse('post-detail',kwargs={
-    #             'id':post.id}))
+    # comment form
+    form=CommentForm(request.POST or None)
+    if request.method=='POST':
+        if form.is_valid():
+            form.instance.user=request.user
+            form.instance.post=post
+            form.save()
+            return redirect(reverse("post-details", kwargs={
+                'id': post.pk
+            }))
 
     context={
         'latest': latest,
@@ -157,6 +155,7 @@ def post(request ,id):
         'category_count': category_count,
         'likes':likes ,
         'liked':liked,
+        'form':form,
     }
 
 

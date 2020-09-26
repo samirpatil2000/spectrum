@@ -45,6 +45,10 @@ class Post(models.Model):
     def view_count(self):
         return PostView.objects.filter(post=self).count()
 
+    @property
+    def get_comments(self):
+        return self.comments.all()  # this is from related name is comment
+
 
 
     #
@@ -71,6 +75,16 @@ class PostView(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     post=models.ForeignKey(Post,on_delete=models.CASCADE)
 
+
+    def __str__(self):
+        return self.user.username
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)   # @property
 
     def __str__(self):
         return self.user.username
