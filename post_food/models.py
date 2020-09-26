@@ -28,10 +28,14 @@ class Post(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
     thumbnail=models.ImageField()
+    likes=models.ManyToManyField(User,related_name='posts_like')
     #featured=models.BooleanField()
 
     def __str__(self):
         return self.title
+
+    def number_of_likes(self):
+        return self.likes.count()
 
     def get_absolute_url(self):
         return reverse('post-details',kwargs={'id':self.pk})

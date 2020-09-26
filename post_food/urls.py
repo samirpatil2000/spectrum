@@ -11,7 +11,9 @@ urlpatterns = [
     path('blog/',views.blog,name='blogs'),
     path('join_us/',views.join_us,name='join_us'),
     path('post/<int:id>/',views.post,name='post-details'),
-   # path('post/<int:pk>/',PostDetailView.as_view(),name='post-details'),
+    path('like/<int:pk>/', views.likepost, name='like_post'),
+
+    # path('post/<int:pk>/',PostDetailView.as_view(),name='post-details'),
     path('post/<str:username>/', UserPostListView.as_view(), name='user-posts'),
     #
     path('post/Cat/<int:id>/', CategaryPostLisView.as_view(), name='cat-posts'),

@@ -10,7 +10,8 @@ from django.template.loader import get_template
 from.models import Post,Category,PostView
 from django.views.generic import ListView , DetailView,CreateView,UpdateView,DeleteView
 from .forms import PostForm,ContactForm
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 
@@ -225,3 +226,9 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         post=self.get_object()
         if self.request.user==post.author:
             return True
+
+
+def likepost(request,pk):
+    post=get_object_or_404(Post,id=request.GET.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post-details',args=[str(pk)]))
