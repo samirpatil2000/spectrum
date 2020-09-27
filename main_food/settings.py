@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Users',
     'ckeditor',
     'ckeditor_uploader',
+     'cropperjs',
 ]
 CKEDITOR_UPLOAD_PATH = "uploads/"
 

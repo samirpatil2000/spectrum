@@ -127,11 +127,19 @@ def post(request ,id):
 
     like_fun = get_object_or_404(Post, id=id)
     likes = like_fun.number_of_likes()     # function calling from models.py
-
+    dislikes=like_fun.number_of_dislikes()
     liked=False
+    disliked=False
 
     if like_fun.likes.filter(id=request.user.id).exists():
         liked=True
+        disliked=False
+    if like_fun.dislikes.filter(id=request.user.id).exists():
+        liked=False
+        disliked=True
+
+
+
     latest = Post.objects.order_by('-date_posted')[0:3]
 
     if request.user.is_authenticated :  # this is for view
@@ -154,7 +162,9 @@ def post(request ,id):
         'post':post,
         'category_count': category_count,
         'likes':likes ,
+        'dislikes':dislikes,
         'liked':liked,
+        'disliked':disliked,
         'form':form,
     }
 
@@ -254,4 +264,16 @@ def likepost(request,pk):
     else:
         post.likes.add(request.user)
         liked=True      # this is for showing the user
+    return HttpResponseRedirect(reverse('post-details',args=[str(pk)]))
+
+@login_required   #if user is authentic then you can like it
+def dislikepost(request,pk):
+    post=get_object_or_404(Post,id=request.GET.get('post_dislike_id'))
+    disliked=False
+    if post.dislikes.filter(id=request.user.id).exists():   # if user double clicked on the like button then remove it
+        post.dislikes.remove(request.user)
+        disliked=False
+    else:
+        post.dislikes.add(request.user)
+        disliked=True      # this is for showing the user
     return HttpResponseRedirect(reverse('post-details',args=[str(pk)]))

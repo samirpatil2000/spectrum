@@ -70,8 +70,22 @@
                                     </button>
                                 </form>
                             {% endif %}
+                            {% if disliked %}
+                                <form action="{% url 'dislike_post' post.pk %}" >
+                                    <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
+                                        Un_dislike
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="{% url 'dislike_post' post.pk %}" >
+                                    <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+                                        Dislike
+                                    </button>
+                                </form>
+                            {% endif %}
                     {% endif %}
                     <h5> the number of like {{ likes }}</h5>
+                    <h5> the number of dislike {{ dislikes }}</h5>
 
 
                     <p>

@@ -1,11 +1,14 @@
 from PIL import Image
 from ckeditor_uploader.fields import RichTextUploadingField
+from cropperjs.models import CropperImageField
+
 from django.db import models
 
 # Create your models here.
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 class Category(models.Model):
@@ -27,8 +30,10 @@ class Post(models.Model):
     date_posted=models.DateTimeField(default=timezone.now())
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
-    thumbnail=models.ImageField()
+    #thumbnail=CropperImageField(upload_to='post_images')
+    thumbnail=models.ImageField(upload_to='post_images')
     likes=models.ManyToManyField(User,related_name='posts_like')
+    dislikes=models.ManyToManyField(User,related_name='posts_dislike')
     #featured=models.BooleanField()
 
 
@@ -37,6 +42,10 @@ class Post(models.Model):
 
     def number_of_likes(self): # this is the function that we are gonna call
         return self.likes.count()
+
+    def number_of_dislikes(self):
+        return self.dislikes.count()
+
 
     def get_absolute_url(self):
         return reverse('post-details',kwargs={'id':self.pk})
