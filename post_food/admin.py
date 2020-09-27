@@ -6,4 +6,5 @@ admin.site.register(Post)
 admin.site.register(Category)
 admin.site.register(PostView)
 
+
 admin.site.register(Comment)
