@@ -32,8 +32,8 @@ class Post(models.Model):
     categories = models.ManyToManyField(Category)
     #thumbnail=CropperImageField(upload_to='post_images')
     thumbnail=models.ImageField(upload_to='post_images')
-    likes=models.ManyToManyField(User,related_name='posts_like')
-    dislikes=models.ManyToManyField(User,related_name='posts_dislike')
+    likes=models.ManyToManyField(User,related_name='posts_like',default=None)
+    dislikes=models.ManyToManyField(User,related_name='posts_dislike',default=None)
     #featured=models.BooleanField()
 
 

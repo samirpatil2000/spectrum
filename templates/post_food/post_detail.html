@@ -48,7 +48,7 @@
 <!--                <h1>{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>-->
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="{% url 'user-posts' post.author %}" class="author d-flex align-items-center flex-wrap">
                     <div class="avatar"><img src="{{ post.author.profile.profile_pic.url }}" alt="..." class="img-fluid"></div>
-                    <div class="title"><span>{{ post.author.user.username }}</span></div></a>
+                    <div class="title"><span>{{ post.author.profile.user }}</span></div></a>
                   <div class="d-flex align-items-center flex-wrap">
                     <div class="date"><i class="icon-clock"></i> {{ post.date_posted|timesince }} ago</div>
                     <div class="views"><i class="icon-eye"></i> {{ post.view_count}}</div>
@@ -63,25 +63,42 @@
                                         Unlike
                                     </button>
                                 </form>
-                            {% else %}
-                                <form action="{% url 'like_post' post.pk %}" >
-                                    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
-                                        Likes
+
+                                <form action="#" >
+<!--                                <form action="{% url 'dislike_post' post.pk %}" >-->
+                                    <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
+                                        Dislike
                                     </button>
                                 </form>
-                            {% endif %}
-                            {% if disliked %}
+
+                            {% elif disliked %}
+                                <form action="#" >
+<!--                                <form action="{% url 'like_post' post.pk %}" >-->
+                                    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+                                        Like
+                                    </button>
+                                </form>
+
                                 <form action="{% url 'dislike_post' post.pk %}" >
                                     <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
                                         Un_dislike
                                     </button>
                                 </form>
                             {% else %}
+
+                                <form action="{% url 'like_post' post.pk %}" >
+<!--                                <form action="{% url 'like_post' post.pk %}" >-->
+                                    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+                                        Like
+                                    </button>
+                                </form>
+
                                 <form action="{% url 'dislike_post' post.pk %}" >
-                                    <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+                                    <button type="submit" name="post_dislike_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
                                         Dislike
                                     </button>
                                 </form>
+
                             {% endif %}
                     {% endif %}
                     <h5> the number of like {{ likes }}</h5>
@@ -121,13 +138,13 @@
                             <div class="comment-header d-flex justify-content-between">
                               <div class="user d-flex align-items-center">
                                 <div class="image">
-                                  {% if post.comments.user.author %}
-                                  <img src="{{ comment.user.author.profile_picture.url }}" alt="..." class="img-fluid rounded-circle">
+                                  {% if comment.user.profile.user %}
+                                  <img src="{{ comment.user.profile.profile_pic.url }}" alt="..." class="img-fluid rounded-circle">
                                   {% else %}
                                   <img src="{% static 'img/user.svg' %}" alt="..." class="img-fluid rounded-circle">
                                   {% endif %}
                                 </div>
-                                <div class="title"><strong>{{ post.comments.user.username }}</strong><span class="date">{{ comment.timestamp|timesince }} ago</span></div>
+                                <div class="title"><strong>{{ comment.user }} </strong><span class="date">{{ comment.timestamp|timesince }} ago</span></div>
                               </div>
                             </div>
                             <div class="comment-body">

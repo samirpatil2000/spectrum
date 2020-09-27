@@ -254,10 +254,16 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
             return True
 
 
+
+""" Form like and dislike """
+
+liked=False
+disliked=False
+
 @login_required   #if user is authentic then you can like it
 def likepost(request,pk):
     post=get_object_or_404(Post,id=request.GET.get('post_id'))
-    liked=False
+    # liked=False
     if post.likes.filter(id=request.user.id).exists():   # if user double clicked on the like button then remove it
         post.likes.remove(request.user)
         liked=False
@@ -269,7 +275,7 @@ def likepost(request,pk):
 @login_required   #if user is authentic then you can like it
 def dislikepost(request,pk):
     post=get_object_or_404(Post,id=request.GET.get('post_dislike_id'))
-    disliked=False
+    #disliked=False
     if post.dislikes.filter(id=request.user.id).exists():   # if user double clicked on the like button then remove it
         post.dislikes.remove(request.user)
         disliked=False
